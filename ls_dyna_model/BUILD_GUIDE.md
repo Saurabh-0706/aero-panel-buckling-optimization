@@ -167,3 +167,63 @@ differential-evolution optimizer plus an optional LLM-driven one, see
 `optimizers/classical_optimizer.py` and `optimizers/llm_optimizer.py`'s
 own docstrings for the full reasoning). `optimizers/compare_optimizers.py`
 produces the final comparison plot.
+
+## Closing the loop: real-solve validation, targeted infill, and a second failure mode (2026-09-21)
+
+An optimizer's result only means anything once it's checked against a real
+solve, not just the surrogate's word for it -- `optimizers/validate_optimum.py`
+exists for exactly that. First run: the classical optimizer's result
+(1.103 kg, `n_str` sitting at its upper bound, the edge of the DOE) came
+back from a real LS-DYNA solve at 294.8 N/mm against a 300 N/mm target --
+1.7% short. The surrogate was mildly optimistic right at that edge, which
+makes sense: a Gaussian Process has the least data to interpolate from
+there. `doe/add_validated_point.py` folded that real point into the
+dataset (point 200) and the surrogate/optimizer were re-run, giving a
+tighter (but still edge-of-space) result.
+
+To close that gap properly rather than patch around one point,
+`doe/generate_infill_points.py` added 15 more real solves concentrated
+right in that neighborhood (t_skin/h_str/t_str near the optimum, `n_str`
+restricted to {5, 6}) -- the same "infill" idea used in sequential/Bayesian
+design optimization: sample where the optimizer keeps landing, not more
+uniformly everywhere.
+
+3 of those 15 (points 201, 203, 214) failed -- but with a **new, opposite**
+failure mode from every earlier issue in this project. LS-DYNA's own
+eigensolver refused to trust its result: `Error 60419 -- No trusted
+eigenvalues were computed... Numerical problems may be caused by too low
+initial loading for buckling.` Every earlier failure in this project (the
+5/60 and 3/140 negative-`lambda_1` cases above) was Pref set **too high**;
+`PRELOAD_SAFETY_FACTOR` was lowered twice (0.15 -> 0.06 -> 0.02) chasing
+exactly that direction. These 3 points sit at a corner (thin skin,
+1.22-1.30mm, with `n_str=6`, the narrowest bay) where the hand-calc
+estimate is low enough that 0.02x of it is only ~1200-1450 N total --
+small enough in absolute terms to sit near the solver's own numerical
+noise floor, independent of whether it's "correctly" subcritical. This was
+flagged as a hypothetical risk in `PRELOAD_SAFETY_FACTOR`'s own docstring
+from the start; this is it actually happening, diagnosed from the real
+solver log rather than guessed at from the truncated exit code.
+
+Fixed with a new script, `doe/retry_low_preload_points.py`, that retries
+*only* the named failed point_ids with an in-process (not on-disk)
+override of `PRELOAD_SAFETY_FACTOR` -- deliberately not a global change,
+both because the other 211 points already solved correctly at 0.02 and
+because point 85 (the unresolved "too high" anomaly noted above) needs the
+opposite correction and would be wrongly swept into a blanket retry. Used
+`--safety-factor 0.06` -- already validated across 137/140 of the original
+sweep, so well-precedented rather than guessed -- and all 3 points solved
+cleanly on the first try (N_cr = 194.7 / 187.5 / 159.9 N/mm). Documented in
+`classical_buckling.py`'s own docstring: the global default stays 0.02,
+but this corner of the design space needs ~0.06.
+
+**Final dataset: 215 points** (199 base + 1 validated optimum + 12 infill
+successes + 3 retried infill, zero non-physical results, point 85 still
+excluded) -- retrained surrogate: pooled R^2 = 0.988, worst fold R^2 =
+0.983, RMSE = 24.1 N/mm, MAPE = 9.1%. Re-optimized best mass: **1.122 kg**
+(t_skin=1.564mm, n_str=6, h_str=30.28mm, t_str=1.0mm), predictive
+uncertainty tightened to +/-13.6 N/mm (from +/-16.6 with just the single
+validated point). Re-validated against a real LS-DYNA solve: **309.0
+N/mm real vs. 300.0 N/mm surrogate-predicted vs. 316.3 N/mm hand-calc
+sanity floor** -- surrogate under-predicted by 2.9% this time (the safe
+direction), the real solve clears the 300 N/mm target, and the design
+holds up against ground truth. Treated as the final validated result.
