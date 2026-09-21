@@ -1,6 +1,6 @@
 {
   "data_path": "C:\\Users\\srp07\\OneDrive\\Desktop\\PROJECTS\\aero-panel-buckling-optimization\\results\\doe_results_panel.csv",
-  "n_points": 200,
+  "n_points": 215,
   "feature_names": [
     "t_skin",
     "n_str",
@@ -11,23 +11,23 @@
   "target_stats": {
     "min": 23.6427,
     "max": 1130.8165,
-    "mean": 251.68644550000002,
-    "std": 226.2265477693358
+    "mean": 252.93036511627906,
+    "std": 219.38708849443714
   },
   "cv_metrics": {
     "n_splits": 5,
-    "pooled_r2": 0.989672227225016,
-    "pooled_rmse_N_per_mm": 22.990420005565653,
-    "pooled_mae_N_per_mm": 16.237711961780168,
-    "pooled_mape_pct": 9.894216649618912,
+    "pooled_r2": 0.9879389943563501,
+    "pooled_rmse_N_per_mm": 24.093662635225574,
+    "pooled_mae_N_per_mm": 15.768679828391694,
+    "pooled_mape_pct": 9.142696521050473,
     "per_fold_r2": [
-      0.9874478285594264,
-      0.9928859886183244,
-      0.9796880010370351,
-      0.9921648219859317,
-      0.9924128757755575
+      0.9900744975852938,
+      0.9860189541009345,
+      0.9915497133910836,
+      0.9831801926874777,
+      0.9921787662637241
     ],
-    "worst_fold_r2": 0.9796880010370351
+    "worst_fold_r2": 0.9831801926874777
   },
-  "fitted_kernel": "0.988**2 * RBF(length_scale=[1.17, 2.25, 1.12, 4.86]) + WhiteKernel(noise_level=0.00327)"
+  "fitted_kernel": "0.991**2 * RBF(length_scale=[1.16, 2.26, 1.06, 4.35]) + WhiteKernel(noise_level=0.00309)"
 }
