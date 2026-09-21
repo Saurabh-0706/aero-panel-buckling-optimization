@@ -88,11 +88,34 @@ bearing on the physical meaning of a result once solved. Two points solved
 under different factor values are still directly comparable, AS LONG AS
 each one's own preload stayed subcritical (which is exactly what
 solve_one_point_lsdyna()'s non-positive-lambda_1 check enforces per point,
-retrying under a note in failed_points.json otherwise). If this value
-needs to go much lower than 0.02 to clear future failures, worth watching
-for the opposite failure mode instead -- a preload so small its forces sit
-near the solver's numerical noise floor -- though nothing so far suggests
-that's close at this magnitude.
+retrying under a note in failed_points.json otherwise).
+
+The "opposite failure mode" flagged above as a hypothetical -- a preload
+so small its forces sit near the solver's numerical noise floor -- did
+show up for real, just not from lowering this constant further. It hit an
+untested CORNER of the design space instead: an infill batch concentrated
+at thin skin (t_skin ~1.2-1.3mm) with n_str=6 (narrow bay, low hand-calc
+N_cr ~150-190 N/mm) produced 3 points (201, 203, 214) where LS-DYNA's own
+eigensolver refused to trust its result and errored explicitly: "Error
+60419: No trusted eigenvalues were computed... Numerical problems may be
+caused by too low initial loading for buckling." At those points, 0.02x
+the (already low) hand-calc estimate gave a total preload of only
+~1200-1450 N -- too small in absolute terms for the solver, independent of
+whether it's "correctly" subcritical. Retried with a temporary, per-point
+override (doe/retry_low_preload_points.py; does NOT change this global
+default) at 0.06 -- the same value already validated across the other
+137/140 points of the original sweep -- and all 3 solved cleanly on the
+first try (N_cr = 194.7 / 187.5 / 159.9 N/mm respectively), confirming
+0.06 as the fix for this corner without needing to explore all the way up
+to 0.10.
+
+Net effect: PRELOAD_SAFETY_FACTOR stays 0.02 as the global default (it's
+correct for the 211 already-solved points at that value), but 0.02 is now
+known to be too aggressive specifically for thin-skin + high-n_str
+(narrow-bay) designs -- anyone extending the DOE further into that corner
+should expect to need something closer to 0.06 there, and
+doe/retry_low_preload_points.py is the documented, tested way to apply
+that per-point rather than by editing this constant.
 """
 
 
