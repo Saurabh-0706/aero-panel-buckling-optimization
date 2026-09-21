@@ -1,0 +1,60 @@
+{
+  "_comment": "Stiffened panel buckling problem: a flat skin panel with equally-spaced longitudinal blade stringers, loaded in axial (in-plane) compression, representative of a wing-lower-cover or fuselage-skin structural bay. Analysis type is LINEAR BUCKLING EIGENVALUE EXTRACTION (a nonlinear implicit static pre-load step to establish a reference in-plane stress state, followed by *CONTROL_IMPLICIT_BUCKLE), NOT a nonlinear post-buckling collapse simulation -- chosen deliberately because it is fast (seconds, not tens of minutes), numerically robust (no snap-through/self-contact convergence drama the way the crush-tube project's transient collapse solve had), and is standard practice for first-pass aerospace panel sizing. This file has NOT yet been run against a real LS-DYNA install -- see doe/test_single_point_lsdyna.py and the _needs_verification notes throughout for what to confirm first.",
+
+  "solver": {
+    "executable": "C:\\Program Files\\LS-DYNA Suite R16.1 Student\\lsdyna\\ls-dyna_smp_d_R16.1_180-gd50332dbe5_winx64_ifort190_sse2_studentversion.exe",
+    "_note": "LS-DYNA Student is a pure command-line batch solver -- no GUI needed to run a solve. This path is passed straight through to PyDYNA's run_dyna(..., executable=this_path) in doe/run_doe_lsdyna.py -- deliberately NOT relying on PyDYNA's `save-ansys-path` auto-discovery, because that path is only ever consulted by PyDYNA's Linux runner (confirmed by reading ansys/dyna/core/run/windows_runner.py -- WindowsRunner._find_solver() never calls get_dyna_path() at all). An explicit path here works identically on both platforms. Confirmed against a real Student R16.1 install: the solver executable lives in a 'lsdyna' subfolder next to 'lspp' (the LS-PrePost GUI folder), with a long descriptive filename (compiler/version info baked in) rather than the short 'lsdyna_sp.exe' name a full Ansys Unified install would use -- the exact filename doesn't matter, only that it's the right .exe, not ansyscl.exe or lstc_client.exe (license-client helpers) or an older bundled version."
+  },
+
+  "design_parameters": {
+    "t_skin": {"unit": "mm", "bounds": [1.0, 3.0], "description": "Skin (panel) thickness"},
+    "n_str":  {"unit": "count", "bounds": [2, 6], "integer": true, "description": "Number of equally-spaced longitudinal blade stringers"},
+    "h_str":  {"unit": "mm", "bounds": [10.0, 40.0], "description": "Stringer blade height (out of panel plane)"},
+    "t_str":  {"unit": "mm", "bounds": [1.0, 3.0], "description": "Stringer blade thickness"}
+  },
+
+  "fixed_parameters": {
+    "panel_length_La_mm": 500.0,
+    "_La_comment": "Axial direction -- the loaded/simply-supported edges are at x=0 and x=La.",
+    "panel_width_Wb_mm": 400.0,
+    "_Wb_comment": "Transverse direction -- the unloaded, simply-supported edges are at y=0 and y=Wb.",
+    "_Pref_comment": "CHANGED after a real solve: there is deliberately no single fixed reference_load_Pref_N here anymore. A fixed Pref cannot work across this DOE's ~150x range of actual critical loads (see classical_buckling.py's __main__ block) -- a value safely subcritical for the strongest designs is wildly supercritical for the weakest ones. Confirmed concretely: a fixed Pref=100,000N exceeded a mid-range point's ~86,360N estimated critical load, which pushed the nonlinear preload step past bifurcation and produced a negative/nonphysical eigenvalue. Pref is now computed PER DESIGN POINT in classical_buckling.reference_load_Pref_N() -- see PRELOAD_SAFETY_FACTOR's docstring there for the full reasoning -- as a fraction (default 0.15) of that point's classical hand-calc estimate, so the preload step stays elastic/subcritical automatically across the whole design space."
+  },
+
+  "material": {
+    "_comment": "Aluminum 2024-T3 sheet, standard aerospace skin/stringer alloy. Values below are commonly-cited handbook approximations (MMPDS-style) for this alloy/temper -- treat as reasonable defaults for a portfolio project, NOT as certified design allowables. If precision matters, cross-check against an actual MMPDS-11 (or later) table for the specific product form/gauge before relying on the numbers.",
+    "youngs_modulus_GPa": 73.1,
+    "poissons_ratio": 0.33,
+    "density_kg_m3": 2780,
+    "yield_stress_MPa": 324,
+    "ultimate_stress_MPa": 449
+  },
+
+  "boundary_conditions": {
+    "all_four_edges": "Out-of-plane (Z) translation = 0 along x=0, x=La, y=0, y=Wb -- the standard 'simply supported' plate-buckling assumption (no rotational restraint needed for shell elements' natural DOFs to represent simple support).",
+    "loaded_edges_x0_xLa": "In-plane Y translation = 0 (prevents the loaded edges from splaying sideways); X translation free at x=La (so the reference load can be applied/reacted) and = 0 at x=0 (fixed reacting edge).",
+    "unloaded_edges_y0_ywb": "In-plane X translation free (lets the panel contract axially under Poisson effect without spurious edge restraint); one single node additionally pinned in Y to remove rigid-body motion.",
+    "_needs_verification": "This is the standard textbook simply-supported compression-panel BC set, but has not been checked against a real LS-DYNA solve yet -- if the first eigenvalue comes back nonphysical (e.g. a rigid-body mode at lambda~0, or a wildly low eigenvalue), check *BOUNDARY_SPC_SET node group assignments first."
+  },
+
+  "geometry_note": "Skin: flat rectangular shell mesh, La x Wb. Stringers: blade-type (single rectangular strip per stringer, standing perpendicular to the skin, sharing edge nodes with the skin mesh along its base -- the simplest stiffener cross-section to parametrize and mesh programmatically), n_str of them, equally spaced across Wb, each running the full length La. Both skin and stringers meshed as *ELEMENT_SHELL with a mesh density of roughly panel_length/40 per element (tune once a real solve time is known).",
+
+  "study": {
+    "type": "Linear buckling eigenvalue extraction",
+    "workflow": "Step 1: *CONTROL_IMPLICIT_GENERAL + *CONTROL_IMPLICIT_STATIC nonlinear implicit static solve under reference_load_Pref_N to establish the in-plane stress state. Step 2: *CONTROL_IMPLICIT_BUCKLE referencing that stress state, extracting the lowest few eigenvalues (buckling load factors).",
+    "_grounding": "Card structure grounded against LS-DYNA's own published example, 'Linear buckling analysis of a panel with a bead' (lsdyna.ansys.com) -- same *CONTROL_IMPLICIT_BUCKLE keyword, same two-step (nonlinear pre-load then eigenvalue extraction) pattern. Exact numeric card parameters (solver tolerances, number of eigenvalues, etc.) are first-draft defaults and will likely need tuning against your actual install -- same spirit as the crush-tube project's honest 'this hasn't touched a real solver yet' disclaimers.",
+    "n_eigenvalues_to_extract": 3,
+    "_n_eigenvalues_comment": "Extract the lowest 3 modes, not just 1 -- for some stringer configurations the first two eigenvalues can be very close together (skin-bay-buckling vs. stringer-flexural modes), and seeing more than one mode helps sanity-check the result."
+  },
+
+  "output": {
+    "_comment": "CONFIRMED against a real solve (Student R16.1, Windows, 2026-09-21): the eigenvalues are NOT in d3hsp for this version -- d3hsp only logs a line like 'write eigout file' as it's produced. The actual eigenvalue table lives in a separate text file called `eigout` in the point's working directory, parsed by run_doe_lsdyna.py's _parse_eigenvalue_from_eigout().",
+    "likely_location": "eigout: a small text file with a 'results of eigenvalue analysis' header followed by a 'MODE    EIGENVALUE  ...' table (mode 1 = lowest/first-extracted buckling load factor). A d3eigv binary file is also written alongside it for mode-shape visualization in LS-PrePost."
+  },
+
+  "targets": {
+    "_comment": "Placeholder pending real DOE data -- same caveat as the crush-tube project's placeholder targets.",
+    "design_running_load_N_per_mm": 300.0,
+    "_design_load_comment": "A representative (not certified) ultimate compressive running load for a wing-lower-cover-type bay. Constraint: critical_buckling_load_N / panel_width_Wb_mm >= this value. Revisit once a few real points exist."
+  }
+}
