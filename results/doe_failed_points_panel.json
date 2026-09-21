@@ -1,0 +1,10 @@
+[
+  {
+    "point_id": "85",
+    "t_skin": 2.79827,
+    "n_str": 6,
+    "h_str": 38.98133,
+    "t_str": 1.4022,
+    "error": "Non-positive lambda_1 (-29.7932) -- the preload step likely crossed this design's true critical load before the eigenvalue extraction ran (see PRELOAD_SAFETY_FACTOR's docstring in classical_buckling.py). Treating as a failed point rather than recording nonphysical data."
+  }
+]
