@@ -1,0 +1,83 @@
+{
+  "target_N_per_mm": 300.0,
+  "n_seeds": 6,
+  "n_feasible_seeds": 6,
+  "best": {
+    "mass_kg": 1.1032204588043857,
+    "t_skin": 1.5393551801144314,
+    "n_str": 6,
+    "h_str": 29.656951861141557,
+    "t_str": 1.0000000005613394,
+    "surrogate_predicted_N_cr_per_mm": 300.00000013219375,
+    "surrogate_std_N_cr_per_mm": 21.752178893806636,
+    "hand_calc_N_cr_per_mm": 301.48244852136315
+  },
+  "all_seed_results": [
+    {
+      "seed": 0,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204592646822,
+      "t_skin": 1.5393519047094097,
+      "n_str": 6,
+      "h_str": 29.657170192484802,
+      "t_str": 1.0000000033998713,
+      "predicted_N_cr_per_mm": 300.00000007322416
+    },
+    {
+      "seed": 1,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204597956325,
+      "t_skin": 1.5393451625846346,
+      "n_str": 6,
+      "h_str": 29.657619819880722,
+      "t_str": 1.0000000004074088,
+      "predicted_N_cr_per_mm": 300.00000019814655
+    },
+    {
+      "seed": 2,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204588043857,
+      "t_skin": 1.5393551801144314,
+      "n_str": 6,
+      "h_str": 29.656951861141557,
+      "t_str": 1.0000000005613394,
+      "predicted_N_cr_per_mm": 300.00000013219375
+    },
+    {
+      "seed": 3,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204593388626,
+      "t_skin": 1.5393573769025792,
+      "n_str": 6,
+      "h_str": 29.656805426669152,
+      "t_str": 1.000000002112931,
+      "predicted_N_cr_per_mm": 300.0000003636132
+    },
+    {
+      "seed": 4,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204591290689,
+      "t_skin": 1.5393483749365415,
+      "n_str": 6,
+      "h_str": 29.657405591053674,
+      "t_str": 1.0000000001413583,
+      "predicted_N_cr_per_mm": 300.00000008698083
+    },
+    {
+      "seed": 5,
+      "success": true,
+      "feasible": true,
+      "mass_kg": 1.1032204596787452,
+      "t_skin": 1.5393662194757332,
+      "n_str": 6,
+      "h_str": 29.656216022582285,
+      "t_str": 1.0000000000885492,
+      "predicted_N_cr_per_mm": 300.00000002144725
+    }
+  ]
+}

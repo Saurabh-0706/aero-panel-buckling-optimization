@@ -1,0 +1,125 @@
+{
+  "target_N_per_mm": 300.0,
+  "model": "gemini-3.5-flash-lite",
+  "n_rounds_requested": 12,
+  "n_rounds_completed": 12,
+  "best": {
+    "t_skin": 1.9215,
+    "n_str": 4,
+    "h_str": 26.29,
+    "t_str": 2.0,
+    "mass_kg": 1.3606988000000002,
+    "predicted_N_cr_per_mm": 300.1559009658104,
+    "predicted_std_N_cr_per_mm": 14.520421060107871
+  },
+  "history": [
+    {
+      "t_skin": 2.0,
+      "n_str": 4,
+      "h_str": 25.0,
+      "t_str": 2.0,
+      "mass_kg": 1.3900000000000001,
+      "predicted_N_cr_per_mm": 299.2066252993614,
+      "predicted_std_N_cr_per_mm": 14.45052144417763
+    },
+    {
+      "t_skin": 2.0,
+      "n_str": 4,
+      "h_str": 26.0,
+      "t_str": 2.0,
+      "mass_kg": 1.40112,
+      "predicted_N_cr_per_mm": 315.03581366351216,
+      "predicted_std_N_cr_per_mm": 14.51574618494127
+    },
+    {
+      "t_skin": 1.9,
+      "n_str": 4,
+      "h_str": 26.0,
+      "t_str": 2.0,
+      "mass_kg": 1.34552,
+      "predicted_N_cr_per_mm": 291.67332239141655,
+      "predicted_std_N_cr_per_mm": 14.511950902291002
+    },
+    {
+      "t_skin": 1.95,
+      "n_str": 4,
+      "h_str": 26.0,
+      "t_str": 2.0,
+      "mass_kg": 1.3733199999999999,
+      "predicted_N_cr_per_mm": 303.7965676768988,
+      "predicted_std_N_cr_per_mm": 14.508507795047523
+    },
+    {
+      "t_skin": 1.92,
+      "n_str": 4,
+      "h_str": 26.0,
+      "t_str": 2.0,
+      "mass_kg": 1.35664,
+      "predicted_N_cr_per_mm": 296.6284882465838,
+      "predicted_std_N_cr_per_mm": 14.509585383356544
+    },
+    {
+      "t_skin": 1.94,
+      "n_str": 4,
+      "h_str": 26.2,
+      "t_str": 2.0,
+      "mass_kg": 1.3699839999999999,
+      "predicted_N_cr_per_mm": 303.79573129770574,
+      "predicted_std_N_cr_per_mm": 14.518059966951498
+    },
+    {
+      "t_skin": 1.93,
+      "n_str": 4,
+      "h_str": 26.25,
+      "t_str": 2.0,
+      "mass_kg": 1.36498,
+      "predicted_N_cr_per_mm": 301.87700882879574,
+      "predicted_std_N_cr_per_mm": 14.519479533468155
+    },
+    {
+      "t_skin": 1.925,
+      "n_str": 4,
+      "h_str": 26.25,
+      "t_str": 2.0,
+      "mass_kg": 1.3621999999999999,
+      "predicted_N_cr_per_mm": 300.6192272934495,
+      "predicted_std_N_cr_per_mm": 14.519054927189002
+    },
+    {
+      "t_skin": 1.92,
+      "n_str": 4,
+      "h_str": 26.3,
+      "t_str": 2.0,
+      "mass_kg": 1.3599759999999999,
+      "predicted_N_cr_per_mm": 299.87698740182077,
+      "predicted_std_N_cr_per_mm": 14.52068923404099
+    },
+    {
+      "t_skin": 1.922,
+      "n_str": 4,
+      "h_str": 26.28,
+      "t_str": 2.0,
+      "mass_kg": 1.3608656000000001,
+      "predicted_N_cr_per_mm": 300.1781185975485,
+      "predicted_std_N_cr_per_mm": 14.520056653960324
+    },
+    {
+      "t_skin": 1.921,
+      "n_str": 4,
+      "h_str": 26.285,
+      "t_str": 2.0,
+      "mass_kg": 1.3603652,
+      "predicted_N_cr_per_mm": 299.97582074721936,
+      "predicted_std_N_cr_per_mm": 14.520174462415968
+    },
+    {
+      "t_skin": 1.9215,
+      "n_str": 4,
+      "h_str": 26.29,
+      "t_str": 2.0,
+      "mass_kg": 1.3606988000000002,
+      "predicted_N_cr_per_mm": 300.1559009658104,
+      "predicted_std_N_cr_per_mm": 14.520421060107871
+    }
+  ]
+}
