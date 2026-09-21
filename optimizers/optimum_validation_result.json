@@ -1,16 +1,16 @@
 {
   "validated_result_file": "C:\\Users\\srp07\\OneDrive\\Desktop\\PROJECTS\\aero-panel-buckling-optimization\\optimizers\\classical_optimizer_result.json",
   "design": {
-    "t_skin": 1.5393551801144314,
+    "t_skin": 1.5641692775359892,
     "n_str": 6,
-    "h_str": 29.656951861141557,
-    "t_str": 1.0000000005613394
+    "h_str": 30.284320712794973,
+    "t_str": 1.0000000001611813
   },
-  "mass_kg": 1.1032204588043857,
-  "surrogate_predicted_N_cr_per_mm": 300.00000013219375,
-  "real_lsdyna_N_cr_per_mm": 294.84265937161837,
-  "hand_calc_N_cr_per_mm": 301.48244852136315,
+  "mass_kg": 1.1222493530954298,
+  "surrogate_predicted_N_cr_per_mm": 300.00000000227095,
+  "real_lsdyna_N_cr_per_mm": 308.9638534673102,
+  "hand_calc_N_cr_per_mm": 316.2982403235814,
   "target_N_per_mm": 300.0,
-  "surrogate_error_pct": 1.7491840466935589,
-  "real_meets_target": false
+  "surrogate_error_pct": -2.9012628384982384,
+  "real_meets_target": true
 }
