@@ -1,0 +1,16 @@
+# Core pipeline: DOE generation, deck building, LS-DYNA driving
+ansys-dyna-core==0.12.1
+scipy>=1.15
+numpy>=1.26
+
+# Surrogate model
+scikit-learn>=1.5
+joblib>=1.4
+
+# Comparison plot
+matplotlib>=3.9
+
+# Optional: only needed for optimizers/llm_optimizer.py (requires a free
+# GEMINI_API_KEY too, no credit card -- see that script's module
+# docstring). Everything else in this project runs without it.
+google-genai>=1.0
