@@ -48,6 +48,12 @@ DOE -> surrogate -> optimizer -> comparison pipeline end to end.
    points as background context alongside both optimizers' results (or
    just the classical one, if the LLM optimizer hasn't been run) and
    prints a numeric summary. Output: `results/optimizer_comparison.png`.
+6. **Validation** (`optimizers/validate_optimum.py`) -- closes the loop:
+   an optimizer's result only exists inside the surrogate model until
+   this runs the exact winning design point through a real LS-DYNA solve
+   and reports a three-way comparison (surrogate prediction vs. real
+   solve vs. the independent hand-calc), rather than trusting the
+   surrogate's word for it.
 
 ## Results so far
 
@@ -77,6 +83,9 @@ python optimizers/llm_optimizer.py
 
 # 5. Comparison plot (works with just step 3, or steps 3+4)
 python optimizers/compare_optimizers.py
+
+# 6. Validate the classical optimizer's result against a real LS-DYNA solve
+python optimizers/validate_optimum.py
 ```
 
 ## Project structure
