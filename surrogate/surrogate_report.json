@@ -1,0 +1,33 @@
+{
+  "data_path": "/home/claude/aero-panel-buckling-optimization/results/doe_results_panel.csv",
+  "n_points": 199,
+  "feature_names": [
+    "t_skin",
+    "n_str",
+    "h_str",
+    "t_str"
+  ],
+  "target_name": "N_cr_per_mm",
+  "target_stats": {
+    "min": 23.6427,
+    "max": 1130.8165,
+    "mean": 251.4695798994975,
+    "std": 226.7735057787836
+  },
+  "cv_metrics": {
+    "n_splits": 5,
+    "pooled_r2": 0.9870608323719838,
+    "pooled_rmse_N_per_mm": 25.795591074426145,
+    "pooled_mae_N_per_mm": 17.136396878626076,
+    "pooled_mape_pct": 10.284426582254458,
+    "per_fold_r2": [
+      0.9899922101000894,
+      0.9907338692254628,
+      0.9807019911524126,
+      0.9933306745956857,
+      0.9754806804813048
+    ],
+    "worst_fold_r2": 0.9754806804813048
+  },
+  "fitted_kernel": "0.986**2 * RBF(length_scale=[1.18, 2.27, 1.11, 4.87]) + WhiteKernel(noise_level=0.0033)"
+}
